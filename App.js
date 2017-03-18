@@ -8,10 +8,12 @@ import {
   ListView,
   RefreshControl,
   ActivityIndicator,
+  Dimensions,
   AppRegistry
 } from 'react-native';
 
-import PixivAPI from './pixiv_api';
+import PixivAPI from './app/pixiv_api';
+import Illust from './app/views/Illust';
 
 const LoadingIndicator = ({ loading }) => (
   loading ? (
@@ -25,7 +27,7 @@ const LoadingIndicator = ({ loading }) => (
   ) : null
 )
 
-class PixivFan extends React.Component {
+class PixivFan extends Component {
 
   constructor(props) {
     super(props)
@@ -93,21 +95,24 @@ class PixivFan extends React.Component {
           />
         }
         onEndReached={ () => this._onEndReached() }
+        // make ListView as GridView
+        contentContainerStyle={{
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+        }}
       />
     )
   }
 
-  _renderRow(row) {
-    if (row.type === 'Loading') {
-      return <LoadingIndicator loading={ row.loading } />
-    } else {
-      return (
-        <View style={ styles.row }>
-          <Text style={ styles.title }>{ row.title }</Text>
-          <Text style={ styles.desc }>{ row.id }</Text>
-        </View>
-      )
-    }
+  _renderRow(illust) {
+    const columnNumber = 3
+    const {height, width} = Dimensions.get('window');
+
+    return (
+      <Illust illust={illust}
+          max_width={(width-1) / columnNumber}
+          onSelected={(illust) => this.selectRow(illust)} />
+    )
   }
 
   componentWillMount() {
@@ -120,6 +125,10 @@ class PixivFan extends React.Component {
 
   _onEndReached() {
     this._getIllusts('week')
+  }
+
+  selectRow(illust) {
+    console.log(illust);
   }
 
 };
