@@ -1,0 +1,7 @@
+{
+  "expo": {
+    "name": "PixivFan",
+    "icon": "images/icon.png",
+    "sdkVersion": "14.0.0"
+  }
+}
