@@ -105,7 +105,7 @@ class PixivFan extends Component {
   }
 
   _renderRow(illust) {
-    const columnNumber = 3
+    const columnNumber = 2
     const {height, width} = Dimensions.get('window');
 
     return (
