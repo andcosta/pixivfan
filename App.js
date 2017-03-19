@@ -6,26 +6,20 @@ import {
   Text,
   View,
   ListView,
+  ScrollView,
   RefreshControl,
   ActivityIndicator,
   Dimensions,
   AppRegistry
 } from 'react-native';
 
+import AutoResponisve from 'autoresponsive-react-native';
+
 import PixivAPI from './app/pixiv_api';
 import Illust from './app/views/Illust';
 
-const LoadingIndicator = ({ loading }) => (
-  loading ? (
-    <View style={ styles.loading }>
-      <ActivityIndicator
-        animating={ true }
-        style={[ styles.loading ]}
-        size="large"
-      />
-    </View>
-  ) : null
-)
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const ITEM_MARGIN = 2;
 
 class PixivFan extends Component {
 
@@ -34,7 +28,7 @@ class PixivFan extends Component {
     this.state = {
       pagination: { loading: false, next_url: null },
       illusts: [],
-      ds: new ListView.DataSource({ rowHasChanged: (r1,r2) => r1 !== r2 })
+      // ds: new ListView.DataSource({ rowHasChanged: (r1,r2) => r1 !== r2 })
     }
   }
 
@@ -61,7 +55,7 @@ class PixivFan extends Component {
     this.setState({
       pagination: pagination,
       illusts: illustsItems,
-      ds: this.state.ds.cloneWithRows(illustsItems)
+      // ds: this.state.ds.cloneWithRows(illustsItems)
     })
   }
 
@@ -81,37 +75,36 @@ class PixivFan extends Component {
       .catch(error => this._getRankingFailure(error))
   }
 
-  render() {
-    return (
-      <ListView
-        enableEmptySections={ true }
-        automaticallyAdjustContentInsets={ false }
-        dataSource={ this.state.ds }
-        renderRow={ row => this._renderRow(row) }
-        refreshControl={
-          <RefreshControl
-            refreshing={ false }
-            onRefresh={ () => this._onRefresh() }
-          />
-        }
-        onEndReached={ () => this._onEndReached() }
-        // make ListView as GridView
-        contentContainerStyle={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-        }}
-      />
-    )
+  getAutoResponsiveProps() {
+    return {
+      itemMargin: ITEM_MARGIN,
+    };
   }
 
-  _renderRow(illust) {
-    const columnNumber = 2
-    const {height, width} = Dimensions.get('window');
+  renderChildren() {
+    return this.state.illusts.map((illust) => {
+      var ratio = illust.width > 0 ? illust.height / illust.width : 1
+      var s_width = (SCREEN_WIDTH-2 - ITEM_MARGIN*2) / 2
+      var s_height = parseInt(s_width * ratio)
+      return (
+        <View style={{width: s_width, height: s_height, marginLeft: 2, borderRadius: 8}} key={illust.id}>
+          <Illust illust={illust} width={s_width} height={s_height}
+            onSelected={(illust) => this.selectRow(illust)} />
+        </View>
+      );
+    }, this);
+  }
 
+  render() {
     return (
-      <Illust illust={illust}
-          max_width={(width-1) / columnNumber}
-          onSelected={(illust) => this.selectRow(illust)} />
+      <ScrollView style={styles.container}>
+        <View style={{alignItems: 'center'}}>
+          <Text style={styles.title}>Pixiv Rankings - week</Text>
+        </View>
+        <AutoResponisve {...this.getAutoResponsiveProps()}>
+          {this.renderChildren()}
+        </AutoResponisve>
+      </ScrollView>
     )
   }
 
@@ -119,13 +112,13 @@ class PixivFan extends Component {
     this._getIllusts('week')
   }
 
-  _onRefresh() {
-    console.log("_onRefresh")
-  }
+  // _onRefresh() {
+  //   console.log("_onRefresh")
+  // }
 
-  _onEndReached() {
-    this._getIllusts('week')
-  }
+  // _onEndReached() {
+  //   this._getIllusts('week')
+  // }
 
   selectRow(illust) {
     console.log(illust);
@@ -153,9 +146,6 @@ var styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15
   },
-  desc: {
-    fontSize: 13
-  }
 });
 
 AppRegistry.registerComponent('PixivFan', () => PixivFan);

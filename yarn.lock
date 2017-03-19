@@ -321,6 +321,17 @@ auth0-js@^7.4.0:
     winchan "0.1.4"
     xtend "~2.1.1"
 
+autoresponsive-common@~1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/autoresponsive-common/-/autoresponsive-common-1.0.1.tgz#6213e798a6879e6b6340d6127a6133a369c0cb9d"
+
+autoresponsive-react-native@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/autoresponsive-react-native/-/autoresponsive-react-native-1.0.9.tgz#11aea77a1e4ceae172257f75b9138f39608a62fb"
+  dependencies:
+    autoresponsive-common "~1.0.0"
+    react-native ">=0.19.0"
+
 aws-sign2@~0.6.0:
   version "0.6.0"
   resolved "http://registry.npm.taobao.org/aws-sign2/download/aws-sign2-0.6.0.tgz#14342dd38dbcc94d0e5b87d763cd63612c0e794f"
@@ -4224,7 +4235,7 @@ react-native-vector-icons@4.0.0:
     lodash "^4.0.0"
     yargs "^6.3.0"
 
-react-native@^0.42.3:
+react-native@>=0.19.0, react-native@^0.42.3:
   version "0.42.3"
   resolved "http://registry.npm.taobao.org/react-native/download/react-native-0.42.3.tgz#450c8a03a5e3e991a08a426f22776dd8feb80b26"
   dependencies:

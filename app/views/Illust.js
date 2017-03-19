@@ -10,17 +10,15 @@ import {
 export default class Illust extends Component {
   render() {
     const illust = this.props.illust
-    const max_width = this.props.max_width
-    console.log(illust.image_urls.square_medium)
     return(
-      <TouchableHighlight style={{width: max_width, height: max_width}} underlayColor={'#f3f3f2'}
+      <TouchableHighlight style={{width: this.props.width, height: this.props.height, borderRadius: 8}} underlayColor={'#f3f3f2'}
           onPress={()=>this.props.onSelected(this.props.illust)}>
         <Image source={{
-            uri: illust.image_urls.square_medium,
+            uri: illust.image_urls.medium,
             headers: {'Referer': 'https://app-api.pixiv.net/'},
             cache: 'only-if-cached' // iOS only
           }}
-          style={{width: max_width, height: max_width}} />
+        style={{width: this.props.width, height: this.props.height, borderRadius: 8}} />
       </TouchableHighlight>
     )
   }
