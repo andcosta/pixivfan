@@ -20,7 +20,7 @@ export default class Illust extends Component {
             headers: {'Referer': 'https://app-api.pixiv.net/'},
             cache: 'only-if-cached' // iOS only
           }}
-          style={{width: max_width, height: max_width}} />
+          style={{width: max_width, height: max_width, borderRadius: 8}} />
       </TouchableHighlight>
     )
   }

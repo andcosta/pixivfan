@@ -110,8 +110,8 @@ class PixivFan extends Component {
 
     return (
       <Illust illust={illust}
-          max_width={(width-1) / columnNumber}
-          onSelected={(illust) => this.selectRow(illust)} />
+        max_width={(width-2) / columnNumber}
+        onSelected={(illust) => this.selectRow(illust)} />
     )
   }
 

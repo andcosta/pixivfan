@@ -4195,9 +4195,9 @@ react-native-safe-module@^1.1.0:
   dependencies:
     dedent "^0.6.0"
 
-react-native-scripts@^0.0.20:
-  version "0.0.20"
-  resolved "http://registry.npm.taobao.org/react-native-scripts/download/react-native-scripts-0.0.20.tgz#14b548f9a99458d11e36d409f7dc325f1fc13d26"
+react-native-scripts@^0.0.22:
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/react-native-scripts/-/react-native-scripts-0.0.22.tgz#abad00732a88a4ec6f0d7ae6976ff0cb7ec064e1"
   dependencies:
     babel-runtime "^6.9.2"
     chalk "^1.1.3"
