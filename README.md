@@ -9,7 +9,7 @@ Below you'll find information about performing common tasks. The most recent ver
 1. Clone the repo, use `yarn` or `npm` install dependencies.
 1. Install [Expo](https://expo.io/) on your phone.
 1. `npm start` to run server, scan the QR code in Expo App.
-1. Shake your phone and open remote debugger in Chrome.
+1. Following [the guide](https://github.com/infinitered/reactotron/blob/master/docs/quick-start-react-native.md) to install Reactotron, start for happy coding.
 
 ## Table of Contents
 
