@@ -18,7 +18,7 @@ export default class Illust extends Component {
         <Image source={{
             uri: illust.image_urls.square_medium,
             headers: {'Referer': 'https://app-api.pixiv.net/'},
-            cache: 'only-if-cached' // iOS only
+            cache: 'force-cache' // iOS only
           }}
           style={{width: max_width, height: max_width, borderRadius: 8}} />
       </TouchableHighlight>

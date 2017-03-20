@@ -12,6 +12,9 @@ import {
   AppRegistry
 } from 'react-native';
 
+import './app/ReactotronConfig';
+import Reactotron from 'reactotron-react-native';
+
 import PixivAPI from './app/pixiv_api';
 import Illust from './app/views/Illust';
 
@@ -47,11 +50,17 @@ class PixivFan extends Component {
     const pagination = { ...this.state.pagination, loading: false, next_url: responseData.next_url }
     const new_illusts = this.state.illusts ? [ ...this.state.illusts, ...responseData.illusts ] : responseData.illusts
 
-    console.log('_getRankingSuccess')
+    Reactotron.display({
+      name: 'getRankingSuccess',
+      preview: responseData.next_url,
+      value: {pagination: pagination, illusts: new_illusts},
+      important: true
+    })
     this._update(pagination, new_illusts)
   }
 
   _getRankingFailure(error) {
+    Reactotron.error({message: '_getRankingFailure', error: error})
     const pagination = { ...this.state.pagination, loading: false }
     this._update(pagination)
   }
@@ -67,15 +76,20 @@ class PixivFan extends Component {
 
   _getIllusts(mode) {
     if (this.state.pagination.loading) {
-        console.log('loading incomplete, wait...')
-        return
+      Reactotron.log('loading incomplete, wait...')
+      return
     }
 
     var url = this.state.pagination.next_url ? this.state.pagination.next_url
                                              : 'https://app-api.pixiv.net/v1/illust/ranking?mode=week&filter=for_ios'
 
+    Reactotron.display({
+      name: 'getIllusts',
+      preview: url,
+      value: url
+    })
+
     this._getRankingRequest()
-    console.log('_getIllusts', url)
     PixivAPI.get(url)
       .then(responseData => this._getRankingSuccess(responseData))
       .catch(error => this._getRankingFailure(error))
@@ -107,7 +121,6 @@ class PixivFan extends Component {
   _renderRow(illust) {
     const columnNumber = 2
     const {height, width} = Dimensions.get('window');
-
     return (
       <Illust illust={illust}
         max_width={(width-2) / columnNumber}
@@ -116,19 +129,25 @@ class PixivFan extends Component {
   }
 
   componentWillMount() {
+    Reactotron.warn('componentWillMount')
     this._getIllusts('week')
   }
 
   _onRefresh() {
-    console.log("_onRefresh")
+    Reactotron.log('_onRefresh')
   }
 
   _onEndReached() {
+    Reactotron.log('_onEndReached')
     this._getIllusts('week')
   }
 
   selectRow(illust) {
-    console.log(illust);
+    Reactotron.display({
+      name: 'IllustSelected',
+      preview: illust.title,
+      value: illust
+    })
   }
 
 };
