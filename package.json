@@ -22,7 +22,9 @@
   "dependencies": {
     "expo": "^15.0.2",
     "react": "~15.4.0",
-    "react-native": "^0.42.3"
+    "react-native": "^0.42.3",
+    "react-native-icons": "^0.7.1",
+    "react-native-navbar": "^1.6.3"
   },
   "repository": "https://github.com/upbit/pixivfan.git",
   "author": "Zhou Hao <rmusique@gmail.com>",

@@ -6,17 +6,53 @@ import {
   AppRegistry
 } from 'react-native';
 
+import NavigationBar from 'react-native-navbar';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 import './app/ReactotronConfig';
 import Rankings from './app/views/Rankings';
+import Settings from './app/views/Settings';
+
+// console.ignoredYellowBox = [ 'Warning: Failed propType' ];
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      settingVisible: false,
+    };
+  }
+
+  _setSettingVisible(visible) {
+    this.setState({settingVisible: visible});
+  }
+
   render() {
     return (
-      <Rankings />
+      <View style={{flex: 1}}>
+        <NavigationBar
+          tintColor="#F0F0F0"
+          title={{title: "Rankings"}}
+          leftButton={
+            <FontAwesome.Button name="gear" size={28}
+              color="#000000"
+              backgroundColor="#EEEEEE"
+              onPress={() => this._setSettingVisible(true)}
+            />
+          }
+        />
+
+        <Settings
+          visible={this.state.settingVisible}
+          onClose={() => this._setSettingVisible(false)}
+        />
+
+        <Rankings visible={!this.state.settingVisible}/>
+      </View>
     );
   }
 }
 
 AppRegistry.registerComponent('App', () => App);
-
 module.exports = App;
