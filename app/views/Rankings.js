@@ -25,6 +25,7 @@ export default class Rankings extends Component {
 
   constructor(props) {
     super(props)
+    this.api = new PixivAPI();
     this.state = {
       pagination: { loading: false, next_url: null },
       illusts: [],
@@ -81,7 +82,7 @@ export default class Rankings extends Component {
     })
 
     this._getRankingRequest()
-    PixivAPI.get(url)
+    this.api.get(url)
       .then(responseData => this._getRankingSuccess(responseData))
       .catch(error => this._getRankingFailure(error))
   }
