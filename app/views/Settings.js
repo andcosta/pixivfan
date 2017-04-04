@@ -15,11 +15,12 @@ import {
   Dimensions,
 } from 'react-native';
 
+import DatePicker from 'react-native-datepicker'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Reactotron from 'reactotron-react-native';
 
 var css = require("./CommonStyles");
 var GlobalStore = require('../GlobalStore');
-const {screen_height, screen_width} = Dimensions.get('window');
 
 class WithLabel extends Component {
   render() {
@@ -56,7 +57,7 @@ export default class Settings extends Component {
       username: null,
       password: null,
       mode: 'daily',
-      date: now.toLocaleDateString().replace(/\//g, '-'),
+      date: now,
     };
   }
 
@@ -74,7 +75,8 @@ export default class Settings extends Component {
   }
 
   render() {
-    const obj_date = new Date(this.state.date);
+    // const obj_date = new Date();
+    const {height, width} = Dimensions.get('window');
     return (
       <Modal
         animationType='slide'
@@ -83,19 +85,22 @@ export default class Settings extends Component {
         onRequestClose={this.props.onClose}
         >
         <View style={[css.center, {flex: 1, backgroundColor: '#FFFFFF'}]}>
-          <WithLabel label="Username:">
-            <TextInput
-              style={{height: 24, width: screen_width/2}}
+          <View style={[css.row, css.center]}>
+            <View>
+              <Text>Username:</Text>
+            </View>
+            <TextInput style={{height: 24, width: width/2, borderColor: 'gray', borderWidth: 1}}
               autoCapitalize="none"
               autoCorrect={false}
               placeholder="username"
               onChangeText={(text) => this.setState({username: text})}
-              value={this.state.username} />
-          </WithLabel>
+              value={this.state.username}
+            />
+          </View>
 
           <WithLabel label="Password:">
             <TextInput
-              style={{height: 24, width: screen_width/2}}
+              style={{height: 24, width: width/2}}
               autoCapitalize="none"
               autoCorrect={false}
               secureTextEntry={true}
@@ -108,7 +113,7 @@ export default class Settings extends Component {
             <Text>{this.state.mode}</Text>
           </WithLabel>
           <Picker
-            style={{width: screen_width}}
+            style={{width: width}}
             selectedValue={this.state.mode}
             onValueChange={(value) => this.setState({mode: value})}>
             {RANKING_MODES.map((mode) => (
@@ -119,11 +124,22 @@ export default class Settings extends Component {
           <WithLabel label="Date:">
             <Text>{this.state.date}</Text>
           </WithLabel>
-          <DatePickerIOS
-            style={{width: screen_width}}
-            date={obj_date}
+          <DatePicker
+            style={{width: width}}
+            date={this.state.date}
             mode="date"
-            onDateChange={(date) => this.setState({ date: date.toLocaleDateString().replace(/\//g, '-') })} />
+            format="YYYY-MM-DD"
+            minDate="2000-01-01"
+            customStyles={{
+              dateIcon: {
+                marginLeft: 4,
+                marginRight: 24
+              },
+              dateInput: {
+                marginLeft: 32
+              }
+            }}
+            onDateChange={(date) => this.setState({ date: date })} />
 
           <FontAwesome.Button name="check" size={20}
             color="#000000"

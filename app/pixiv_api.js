@@ -1,6 +1,7 @@
 'use strict';
 
 export default class PixivAPI {
+
   constructor() {
     this.headers = {
       'Accept': 'application/json',
@@ -18,5 +19,4 @@ export default class PixivAPI {
     })
     .then((response) => response.json())
   }
-
 }
