@@ -11,6 +11,10 @@ Below you'll find information about performing common tasks. The most recent ver
 1. `npm start` to run server, scan the QR code in Expo App.
 1. Following [the guide](https://github.com/infinitered/reactotron/blob/master/docs/quick-start-react-native.md) to install Reactotron, start for happy coding.
 
+## Screenshots
+
+![Screenshot1](screenshot1.jpg)
+
 ## Table of Contents
 
 * [Updating to New Releases](#updating-to-new-releases)
