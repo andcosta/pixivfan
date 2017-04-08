@@ -32,6 +32,19 @@ export default class Rankings extends Component {
     }
   }
 
+  componentWillMount() {
+    this.api.auth('usersp', 'passsp')
+      .then(function(response) {
+        Reactotron.display({
+          name: 'Login',
+          preview: response.user.name,
+          value: {response: response}
+        })
+      })
+
+    this._getIllusts('week')
+  }
+
   _getRankingRequest() {
     const pagination = { ...this.state.pagination, loading: true }
     this._update(pagination)
@@ -83,11 +96,6 @@ export default class Rankings extends Component {
     this.api.get(url)
       .then(responseData => this._getRankingSuccess(responseData))
       .catch(error => this._getRankingFailure(error))
-  }
-
-  componentWillMount() {
-    Reactotron.warn('componentWillMount')
-    this._getIllusts('week')
   }
 
   render() {
