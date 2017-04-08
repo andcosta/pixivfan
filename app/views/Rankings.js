@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
-  ListView,
+  FlatList,
   RefreshControl,
   ActivityIndicator,
   Dimensions,
@@ -28,8 +28,7 @@ export default class Rankings extends Component {
     this.api = new PixivAPI();
     this.state = {
       pagination: { loading: false, next_url: null },
-      illusts: [],
-      ds: new ListView.DataSource({ rowHasChanged: (r1,r2) => r1 !== r2 })
+      illusts: []
     }
   }
 
@@ -61,8 +60,7 @@ export default class Rankings extends Component {
     const illustsItems = illusts || this.state.illusts
     this.setState({
       pagination: pagination,
-      illusts: illustsItems,
-      ds: this.state.ds.cloneWithRows(illustsItems)
+      illusts: illustsItems
     })
   }
 
@@ -87,30 +85,34 @@ export default class Rankings extends Component {
       .catch(error => this._getRankingFailure(error))
   }
 
+  componentWillMount() {
+    Reactotron.warn('componentWillMount')
+    this._getIllusts('week')
+  }
+
   render() {
     return (
-      <ListView
-        enableEmptySections={ true }
-        automaticallyAdjustContentInsets={ false }
-        dataSource={ this.state.ds }
-        renderRow={ row => this._renderRow(row) }
-        refreshControl={
-          <RefreshControl
-            refreshing={ false }
-            onRefresh={ () => this._onRefresh() }
-          />
-        }
-        onEndReached={ () => this._onEndReached() }
-        // make ListView as GridView
-        contentContainerStyle={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
+      <FlatList
+        data={this.state.illusts}
+        keyExtractor={(illust: ItemT, index: number) => {
+          return illust.id
         }}
+        refreshing={false}
+        onRefresh={() => {
+          Reactotron.log('onRefresh')
+        }}
+        onEndReachedThreshold={1}
+        onEndReached={({ distanceFromEnd }) => {
+          Reactotron.log('onEndReached, load more')
+          this._getIllusts('week')
+        }}
+        renderItem={this._renderItemComponent}
+        numColumns={2}
       />
     )
   }
 
-  _renderRow(illust) {
+  _renderItemComponent(illust) {
     const columnNumber = 2
     const {height, width} = Dimensions.get('window');
     return (
@@ -118,20 +120,6 @@ export default class Rankings extends Component {
         max_width={(width-2) / columnNumber}
         onSelected={(illust) => this.selectRow(illust)} />
     )
-  }
-
-  componentWillMount() {
-    Reactotron.warn('componentWillMount')
-    this._getIllusts('week')
-  }
-
-  _onRefresh() {
-    Reactotron.log('_onRefresh')
-  }
-
-  _onEndReached() {
-    Reactotron.log('_onEndReached')
-    this._getIllusts('week')
   }
 
   selectRow(illust) {

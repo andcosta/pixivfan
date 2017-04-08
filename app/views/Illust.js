@@ -7,11 +7,13 @@ import {
   TouchableHighlight,
 } from 'react-native';
 
+import Reactotron from 'reactotron-react-native';
+
 export default class Illust extends Component {
   render() {
-    const illust = this.props.illust
+    const illust = this.props.illust.item
     const max_width = this.props.max_width
-    console.log(illust.image_urls.square_medium)
+    // Reactotron.log({message: 'Render Illust', illust: illust})
     return(
       <TouchableHighlight style={{width: max_width, height: max_width}} underlayColor={'#f3f3f2'}
           onPress={()=>this.props.onSelected(this.props.illust)}>
