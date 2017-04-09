@@ -20,7 +20,7 @@ export default class Illust extends Component {
       <TouchableHighlight style={{width: max_width, height: calc_height}} underlayColor={'#f3f3f2'}
           onPress={()=>this.props.onSelected(this.props.illust)}>
         <Image source={{
-            uri: illust.image_urls.medium,
+            uri: illust.image_urls.square_medium,
             headers: {'Referer': 'https://app-api.pixiv.net/'},
             cache: 'force-cache' // iOS only
           }}
