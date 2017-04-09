@@ -4,6 +4,8 @@ import {
   AsyncStorage
 } from 'react-native';
 
+import Reactotron from 'reactotron-react-native';
+
 class GlobalStore {
   initState() {
     return {
@@ -16,10 +18,9 @@ class GlobalStore {
     this.settings = {
       username: 'usersp',
       password: 'passsp',
-      mode: 'daily',
+      mode: 'week',
       date: now.toLocaleDateString().replace(/\//g, '-'),
     };
-    // state
     this.state = this.initState();
   }
 
@@ -38,13 +39,16 @@ class GlobalStore {
   saveSettings(settings) {
     this.settings = settings;
     AsyncStorage.setItem('settings', JSON.stringify(this.settings), () => {
-      console.log(`Save settings to AsyncStorage, mode=${this.settings.mode} date=${this.settings.date}`);
+      Reactotron.display({
+        name: 'AsyncStorage',
+        preview: `mode=${this.settings.mode} date=${this.settings.date}`,
+        value: {settings: this.settings}
+      })
     });
   }
 
   reset() {
-    // AsyncStorage.removeItem('pixiv_auth');
-    AsyncStorage.removeItem('settings');
+    AsyncStorage.removeItem('settings')
   }
 }
 

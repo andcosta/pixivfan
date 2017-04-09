@@ -29,20 +29,23 @@ class PixivAPI {
         body: form,
       })
       .then((response) => response.json())
-      .then(function(token) {
+      .then((token) => {
         self.access_token = token.response.access_token
         self.refresh_token = token.response.refresh_token
         return token.response
       })
   }
 
-  get(url) {
-    const headers = {
+  get(url: string, req_auth: bool = false) {
+    var headers = {
       'Accept': 'application/json',
       'App-OS': 'ios',
       'App-OS-Version': '10.2.1',
       'App-Version': '6.7.1',
       'User-Agent': 'PixivIOSApp/6.7.1 (iOS 10.2.1; iPhone8,1)'
+    }
+    if (req_auth) {
+      headers['Authorization'] = 'Bearer ' + this.access_token
     }
     return fetch(url, {
       method: 'GET',

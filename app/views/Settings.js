@@ -36,15 +36,8 @@ class WithLabel extends Component {
 }
 
 var RANKING_MODES = [
-  'daily',
-  'weekly',
-  'male',
-  'female',
-  'daily_r18',
-  'weekly_r18',
-  'male_r18',
-  'female_r18',
-  'r18g',
+  'day', 'week', 'month', 'day_male', 'day_female', 'week_original', 'week_rookie',
+  'day_r18', 'day_male_r18', 'day_female_r18', 'week_r18', 'week_r18g',
 ];
 
 export default class Settings extends Component {
@@ -56,7 +49,7 @@ export default class Settings extends Component {
     this.state = {
       username: null,
       password: null,
-      mode: 'daily',
+      mode: 'week',
       date: now,
     };
   }
@@ -75,7 +68,6 @@ export default class Settings extends Component {
   }
 
   render() {
-    // const obj_date = new Date();
     const {height, width} = Dimensions.get('window');
     return (
       <Modal

@@ -17,6 +17,8 @@ import Reactotron from 'reactotron-react-native';
 import PixivAPI from '../pixiv_api';
 import Illust from './Illust';
 
+import GlobalStore from '../GlobalStore';
+
 export default class Rankings extends Component {
   static navigationOptions = {
     title: 'Rankings',
@@ -32,19 +34,19 @@ export default class Rankings extends Component {
   }
 
   componentWillMount() {
-    this.api.auth('usersp', 'passsp')
-      .then(function(response) {
+    this.columnNumber = 2
+    this.illust_width = (Dimensions.get('window').width-2) / this.columnNumber
+
+    this.api.auth(GlobalStore.settings.username, GlobalStore.settings.password)
+      .then(({response}) => {
         Reactotron.display({
           name: 'Login',
           preview: response.user.name,
           value: {response: response}
         })
-      })
 
-    // TO-DO: calc column number with screen width
-    this.list_width = Dimensions.get('window').width
-    this.columnNumber = 2
-    this._getIllusts('week')
+        this._getIllusts()
+      })
   }
 
   _getRankingRequest() {
@@ -79,23 +81,23 @@ export default class Rankings extends Component {
     })
   }
 
-  _getIllusts(mode) {
+  _getIllusts() {
     if (this.state.pagination.loading) {
       Reactotron.log('loading incomplete, wait...')
       return
     }
 
     var url = this.state.pagination.next_url ? this.state.pagination.next_url
-                                             : 'https://app-api.pixiv.net/v1/illust/ranking?mode=week&filter=for_ios'
+            : `https://app-api.pixiv.net/v1/illust/ranking?mode=${GlobalStore.settings.mode}&date=${GlobalStore.settings.date}&filter=for_ios`
 
     Reactotron.display({
       name: 'getIllusts',
-      preview: url,
-      value: url
+      preview: `mode=${GlobalStore.settings.mode} date=${GlobalStore.settings.date}`,
+      value: {url: url, settings: GlobalStore.settings}
     })
 
     this._getRankingRequest()
-    this.api.get(url)
+    this.api.get(url, true)
       .then(responseData => this._getRankingSuccess(responseData))
       .catch(error => this._getRankingFailure(error))
   }
@@ -104,7 +106,7 @@ export default class Rankings extends Component {
     return (
       <FlatList
         data={this.state.illusts}
-        keyExtractor={(illust: ItemT, index: number) => {
+        keyExtractor={(illust, index) => {
           return illust.id
         }}
         refreshing={false}
@@ -115,18 +117,18 @@ export default class Rankings extends Component {
             illusts: []
           }, function afterReset () {
             Reactotron.log('Pull refreshing')
-            this._getIllusts('week')
+            this._getIllusts()
           })
         }}
         onEndReachedThreshold={1}
         onEndReached={({ distanceFromEnd }) => {
           Reactotron.log('onEndReached, load more')
-          this._getIllusts('week')
+          this._getIllusts()
         }}
         renderItem={({item}) => {
           return (
             <Illust illust={item}
-              max_width={(this.list_width-2) / this.columnNumber}
+              max_width={this.illust_width}
               onSelected={(item) => this._onPress(item)} />
           )
         }}
