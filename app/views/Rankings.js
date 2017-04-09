@@ -17,7 +17,6 @@ import Reactotron from 'reactotron-react-native';
 import PixivAPI from '../pixiv_api';
 import Illust from './Illust';
 
-
 export default class Rankings extends Component {
   static navigationOptions = {
     title: 'Rankings',
@@ -42,6 +41,9 @@ export default class Rankings extends Component {
         })
       })
 
+    // TO-DO: calc column number with screen width
+    this.list_width = Dimensions.get('window').width
+    this.columnNumber = 2
     this._getIllusts('week')
   }
 
@@ -108,29 +110,32 @@ export default class Rankings extends Component {
         refreshing={false}
         onRefresh={() => {
           Reactotron.log('onRefresh')
+          this.setState({
+            pagination: { loading: false, next_url: null },
+            illusts: []
+          }, function afterReset () {
+            Reactotron.log('Pull refreshing')
+            this._getIllusts('week')
+          })
         }}
         onEndReachedThreshold={1}
         onEndReached={({ distanceFromEnd }) => {
           Reactotron.log('onEndReached, load more')
           this._getIllusts('week')
         }}
-        renderItem={this._renderItemComponent}
-        numColumns={2}
+        renderItem={({item}) => {
+          return (
+            <Illust illust={item}
+              max_width={(this.list_width-2) / this.columnNumber}
+              onSelected={(item) => this._onPress(item)} />
+          )
+        }}
+        numColumns={this.columnNumber}
       />
     )
   }
 
-  _renderItemComponent(illust) {
-    const columnNumber = 2
-    const {height, width} = Dimensions.get('window');
-    return (
-      <Illust illust={illust}
-        max_width={(width-2) / columnNumber}
-        onSelected={(illust) => this.selectRow(illust)} />
-    )
-  }
-
-  selectRow(illust) {
+  _onPress(illust) {
     Reactotron.display({
       name: 'IllustSelected',
       preview: illust.title,
