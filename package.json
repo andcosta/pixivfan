@@ -5,7 +5,7 @@
   "devDependencies": {
     "jest-expo": "^0.3.0",
     "react-native-scripts": "^0.0.27",
-    "react-test-renderer": "^15.5.1",
+    "react-test-renderer": "^15.5.4",
     "reactotron-react-native": "^1.9.1"
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
@@ -22,7 +22,7 @@
   "dependencies": {
     "expo": "^15.0.2",
     "react": "16.0.0-alpha.6",
-    "react-native": "^0.43.2",
+    "react-native": "^0.43.3",
     "react-native-datepicker": "^1.4.5",
     "react-native-icons": "^0.7.1",
     "react-native-navbar": "^1.7.1"
