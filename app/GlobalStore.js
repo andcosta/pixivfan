@@ -15,11 +15,12 @@ class GlobalStore {
 
   constructor() {
     const now = new Date();
+    const start_date = new Date(now.setDate(now.getDate()-2)); // pixiv delay return, so date-2
     this.settings = {
       username: 'usersp',
       password: 'passsp',
       mode: 'week',
-      date: now.toLocaleDateString().replace(/\//g, '-'),
+      date: start_date.toJSON().slice(0,10),
     };
     this.state = this.initState();
   }

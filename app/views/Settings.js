@@ -46,11 +46,12 @@ export default class Settings extends Component {
     super(props);
 
     const now = new Date();
+    const start_date = new Date(now.setDate(now.getDate()-2)); // pixiv delay return, so date-2
     this.state = {
       username: null,
       password: null,
       mode: 'week',
-      date: now,
+      date: start_date.toJSON().slice(0,10),
     };
   }
 

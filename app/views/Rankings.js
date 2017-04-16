@@ -37,16 +37,24 @@ export default class Rankings extends Component {
     this.columnNumber = 2
     this.illust_width = (Dimensions.get('window').width-2) / this.columnNumber
 
-    this.api.auth(GlobalStore.settings.username, GlobalStore.settings.password)
-      .then(({response}) => {
+    GlobalStore.reloadSettings()
+      .then(() => {
         Reactotron.display({
           name: 'Login',
-          preview: response.user.name,
-          value: {response: response}
+          preview: GlobalStore.settings.username,
+          value: {user: GlobalStore.settings.username, pass: GlobalStore.settings.password},
         })
-
-        this._getIllusts()
-      })
+        this.api.auth(GlobalStore.settings.username, GlobalStore.settings.password)
+          .then((response) => {
+            Reactotron.display({
+              name: 'Login Success',
+              preview: response.user.name,
+              value: {response: response},
+              important: true
+            })
+            this._getIllusts()
+          })
+      });
   }
 
   _getRankingRequest() {
@@ -81,7 +89,7 @@ export default class Rankings extends Component {
     })
   }
 
-  _getIllusts() {
+  _getIllusts(req_auth=true) {
     if (this.state.pagination.loading) {
       Reactotron.log('loading incomplete, wait...')
       return
@@ -97,7 +105,7 @@ export default class Rankings extends Component {
     })
 
     this._getRankingRequest()
-    this.api.get(url, true)
+    this.api.get(url, req_auth=req_auth)
       .then(responseData => this._getRankingSuccess(responseData))
       .catch(error => this._getRankingFailure(error))
   }
